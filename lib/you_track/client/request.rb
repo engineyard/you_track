@@ -1,7 +1,10 @@
 class YouTrack::Client::Request
   def find(collection, id, options={})
     service.data.fetch(collection)[id] ||
-      service.response(status: 404, body: {"error" => "#{collection.to_s.gsub(/s\Z/, "").capitalize} not found."})
+      service.response(
+        :status => options[:error_status] || 404,
+        :body   => { "error" => options[:error_message] || "#{collection.to_s.gsub(/s\Z/, "").capitalize} not found." }
+    )
   end
 
   def require_parameters(_params, *_requirements)

@@ -19,7 +19,13 @@ describe "as a customer" do
     expect(fetched_user.identity).to eq(username)
   end
 
-  it "gets information about the current user" do
+  it "should get information about the current user" do
     expect(client.users.current.identity).to match(client.username)
+  end
+
+  it "should return nil if user isn't found" do
+    expect(
+      client.users.get("foo")
+    ).to eq(nil)
   end
 end

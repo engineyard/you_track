@@ -7,7 +7,9 @@ class YouTrack::Client::Users < YouTrack::Client::Collection
 
   def get(username)
     service.users.new(service.get_user(username).body)
-  rescue Faraday::ResourceNotFound
+  rescue Faraday::ClientError => e
+    # yes 403 if you have valid creds BUT the user isn't there
+    raise unless [403, 404].include?(e.response[:status])
     nil
   end
 end
